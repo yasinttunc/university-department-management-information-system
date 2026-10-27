@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build, test and UI smoke test (Windows)
+    runs-on: windows-latest
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore
+        run: dotnet restore UniversityDepartmentMIS.sln
+
+      - name: Build
+        run: dotnet build UniversityDepartmentMIS.sln -c Release --no-restore
+
+      - name: Test
+        run: >
+          dotnet test UniversityDepartmentMIS.sln -c Release --no-build
+          --logger "trx;LogFileName=test-results.trx"
+          --logger "console;verbosity=normal"
+          --results-directory TestResults
+
+      - name: Report test counts
+        if: always()
+        shell: pwsh
+        run: |
+          $trx = Get-ChildItem TestResults -Filter *.trx -Recurse | Select-Object -First 1
+          if (-not $trx) { Write-Host "::error title=Tests::No test results found."; exit 1 }
+          $counters = ([xml](Get-Content $trx.FullName)).TestRun.ResultSummary.Counters
+          $summary = "$($counters.total) tests: $($counters.passed) passed, $($counters.failed) failed"
+          Write-Host "::notice title=Tests::$summary"
+          "### Tests`n$summary" | Out-File -Append -Encoding utf8 $env:GITHUB_STEP_SUMMARY
+          if ([int]$counters.total -lt 30) { Write-Host "::error title=Tests::Expected at least 30 tests."; exit 1 }
+
+      - name: UI smoke test
+        shell: powershell
+        run: ./tools/smoke-test.ps1 -Exe src/UniversityDepartmentMIS.Desktop/bin/Release/net8.0-windows/UniversityDepartmentMIS.exe -OutDir smoke
+
+      - name: Upload test results and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-and-screenshots
+          path: |
+            TestResults
+            smoke
+          if-no-files-found: ignore
+
+  content-checks:
+    name: Content checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check source language, banned words and file sizes
+        run: python3 tools/check_content.py

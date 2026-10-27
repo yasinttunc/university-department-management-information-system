@@ -1,0 +1,46 @@
+<UserControl x:Class="UniversityDepartmentMIS.Desktop.Views.Screens.StudentsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <DockPanel Margin="24">
+        <TextBlock DockPanel.Dock="Top" Text="Students" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,16" />
+
+        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,12" LastChildFill="False">
+            <ComboBox x:Name="YearFilter"
+                      AutomationProperties.Name="Year filter"
+                      Width="150"
+                      Margin="0,0,16,0"
+                      materialDesign:HintAssist.Hint="Year of study"
+                      SelectionChanged="Filter_Changed" />
+            <TextBox x:Name="SearchBox"
+                     AutomationProperties.Name="Search students"
+                     Width="300"
+                     materialDesign:HintAssist.Hint="Search by name, number or email"
+                     TextChanged="Filter_Changed" />
+            <Button x:Name="AddButton"
+                    DockPanel.Dock="Right"
+                    Content="ADD STUDENT"
+                    Click="AddButton_Click" />
+        </DockPanel>
+
+        <TextBlock x:Name="CountText" DockPanel.Dock="Bottom" Opacity="0.7" Margin="0,8,0,0" />
+
+        <DataGrid x:Name="StudentsGrid"
+                  AutomationProperties.AutomationId="StudentsGrid"
+                  AutomationProperties.Name="Students"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  SelectionMode="Single"
+                  MouseDoubleClick="StudentsGrid_MouseDoubleClick"
+                  KeyDown="StudentsGrid_KeyDown">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Number" Binding="{Binding StudentNumber}" />
+                <DataGridTextColumn Header="Name" Binding="{Binding FullName}" Width="*" />
+                <DataGridTextColumn Header="Year" Binding="{Binding YearOfStudy}" />
+                <DataGridTextColumn Header="Advisor" Binding="{Binding AdvisorName}" Width="*" />
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

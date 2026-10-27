@@ -1,0 +1,34 @@
+<UserControl x:Class="UniversityDepartmentMIS.Desktop.Views.Screens.DataImportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <DockPanel Margin="24">
+        <TextBlock DockPanel.Dock="Top" Text="Data import" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,8" />
+        <TextBlock x:Name="HelpText" DockPanel.Dock="Top" Opacity="0.75" TextWrapping="Wrap" Margin="0,0,0,16" />
+
+        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+            <Button x:Name="ChooseButton" DockPanel.Dock="Left" Content="CHOOSE FILE" Margin="0,0,8,0" Click="ChooseButton_Click" />
+            <Button x:Name="TemplateButton" DockPanel.Dock="Left" Content="SAVE TEMPLATE" Style="{DynamicResource MaterialDesignOutlinedButton}"
+                    Margin="0,0,16,0" Click="TemplateButton_Click" />
+            <Button x:Name="ImportButton" DockPanel.Dock="Right" Content="IMPORT" IsEnabled="False" Click="ImportButton_Click" />
+            <TextBlock x:Name="FileText" AutomationProperties.Name="Chosen file" VerticalAlignment="Center" Text="No file chosen" Opacity="0.7"
+                       TextTrimming="CharacterEllipsis" />
+        </DockPanel>
+
+        <TextBlock x:Name="SummaryText" DockPanel.Dock="Top" AutomationProperties.Name="Import summary" TextWrapping="Wrap" Margin="0,0,0,8" />
+
+        <DataGrid x:Name="RowsGrid"
+                  AutomationProperties.AutomationId="ImportRowsGrid"
+                  AutomationProperties.Name="Rows in the file"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Row" Binding="{Binding RowNumber}" />
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" />
+                <DataGridTextColumn Header="Number" Binding="{Binding Student.StudentNumber}" />
+                <DataGridTextColumn Header="Name" Binding="{Binding Student.FullName}" Width="*" />
+                <DataGridTextColumn Header="Problems" Binding="{Binding ProblemText}" Width="2*" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

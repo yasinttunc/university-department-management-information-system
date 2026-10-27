@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <Authors>Yasin Tunc</Authors>
+    <Product>University Department Management Information System</Product>
+    <Copyright>Copyright (c) 2024-2026 Yasin Tunc</Copyright>
+    <NeutralLanguage>en-GB</NeutralLanguage>
+  </PropertyGroup>
+</Project>

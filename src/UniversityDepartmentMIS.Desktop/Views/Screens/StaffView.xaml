@@ -1,0 +1,40 @@
+<UserControl x:Class="UniversityDepartmentMIS.Desktop.Views.Screens.StaffView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <DockPanel Margin="24">
+        <TextBlock DockPanel.Dock="Top" Text="Staff" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,16" />
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,12">
+            <Button x:Name="TimetableButton"
+                    Content="VIEW TIMETABLE"
+                    IsEnabled="False"
+                    Margin="0,0,8,0"
+                    Click="TimetableButton_Click" />
+            <Button x:Name="AdviseesButton"
+                    Content="VIEW ADVISEES"
+                    IsEnabled="False"
+                    Style="{DynamicResource MaterialDesignOutlinedButton}"
+                    Click="AdviseesButton_Click" />
+        </StackPanel>
+
+        <TextBlock x:Name="SummaryText" DockPanel.Dock="Bottom" Opacity="0.7" Margin="0,8,0,0" />
+
+        <DataGrid x:Name="StaffGrid"
+                  AutomationProperties.AutomationId="StaffGrid"
+                  AutomationProperties.Name="Staff"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  SelectionMode="Single"
+                  SelectionChanged="StaffGrid_SelectionChanged"
+                  MouseDoubleClick="TimetableButton_Click">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Staff.DisplayName}" Width="*" />
+                <DataGridTextColumn Header="Email" Binding="{Binding Staff.Email}" Width="*" />
+                <DataGridTextColumn Header="Sections" Binding="{Binding Sections}" />
+                <DataGridTextColumn Header="Hours / week" Binding="{Binding WeeklyTeachingHours}" />
+                <DataGridTextColumn Header="Advisees" Binding="{Binding Advisees}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

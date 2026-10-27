@@ -1,0 +1,51 @@
+name: Screenshots
+
+# Runs the UI smoke test in window-only mode and publishes the PNGs to the `ci-screenshots` branch,
+# where they can be copied into docs/screenshots for the README.
+on:
+  workflow_dispatch:
+  push:
+    branches: [screenshots/**]
+
+permissions:
+  contents: write
+
+jobs:
+  screenshots:
+    runs-on: windows-latest
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build
+        run: dotnet build src/UniversityDepartmentMIS.Desktop -c Release
+
+      - name: Use a 1600 x 900 screen
+        continue-on-error: true
+        shell: powershell
+        run: |
+          Set-DisplayResolution -Width 1600 -Height 900 -Force
+          Add-Type -AssemblyName System.Windows.Forms
+          $b = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+          Write-Host "::notice title=Screen::$($b.Width) x $($b.Height)"
+
+      - name: Take screenshots
+        shell: powershell
+        run: ./tools/smoke-test.ps1 -Exe src/UniversityDepartmentMIS.Desktop/bin/Release/net8.0-windows/UniversityDepartmentMIS.exe -OutDir screenshots -WindowOnly
+
+      - name: Publish to the ci-screenshots branch
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan ci-screenshots
+          git rm -rq --cached .
+          git add screenshots
+          git commit -qm "Screenshots from ${GITHUB_SHA::7}"
+          git push -f origin ci-screenshots

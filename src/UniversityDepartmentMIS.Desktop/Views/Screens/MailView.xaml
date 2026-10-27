@@ -1,0 +1,54 @@
+<UserControl x:Class="UniversityDepartmentMIS.Desktop.Views.Screens.MailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <DockPanel Margin="24">
+        <TextBlock DockPanel.Dock="Top" Text="Mail" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,16" />
+
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,12">
+            <ComboBox x:Name="SourcePicker" Width="170" Margin="0,0,16,0" AutomationProperties.Name="Recipients from"
+                      materialDesign:HintAssist.Hint="Recipients from" SelectionChanged="SourcePicker_SelectionChanged" />
+            <ComboBox x:Name="GroupPicker" Width="300" AutomationProperties.Name="Recipient group"
+                      materialDesign:HintAssist.Hint="Group" SelectionChanged="GroupPicker_SelectionChanged" />
+        </StackPanel>
+
+        <TextBox x:Name="SubjectInput" DockPanel.Dock="Top" Margin="0,0,0,12" AutomationProperties.Name="Subject"
+                 materialDesign:HintAssist.Hint="Subject (optional)" />
+
+        <DockPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button x:Name="CopyButton" Content="COPY ADDRESSES" Style="{DynamicResource MaterialDesignOutlinedButton}" Margin="0,0,8,0" Click="CopyButton_Click" />
+                <Button x:Name="ExportButton" Content="EXPORT CSV" Style="{DynamicResource MaterialDesignOutlinedButton}" Margin="0,0,8,0" Click="ExportButton_Click" />
+                <Button x:Name="OpenButton" Content="OPEN IN MAIL APP" Click="OpenButton_Click" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Button Content="SELECT ALL" Style="{DynamicResource MaterialDesignFlatButton}" Click="SelectAll_Click" />
+                <Button Content="SELECT NONE" Style="{DynamicResource MaterialDesignFlatButton}" Click="SelectNone_Click" />
+                <TextBlock x:Name="CountText" AutomationProperties.Name="Selected recipients" VerticalAlignment="Center" Margin="12,0,0,0" Opacity="0.7" />
+            </StackPanel>
+        </DockPanel>
+
+        <TextBlock x:Name="StatusText" DockPanel.Dock="Bottom" Margin="0,8,0,0" Opacity="0.8" TextWrapping="Wrap" />
+
+        <DataGrid x:Name="RecipientsGrid"
+                  AutomationProperties.AutomationId="RecipientsGrid"
+                  AutomationProperties.Name="Recipients"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="" Width="48">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      HorizontalAlignment="Center" AutomationProperties.Name="Include" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Name" Binding="{Binding Recipient.Name}" IsReadOnly="True" Width="*" />
+                <DataGridTextColumn Header="Email" Binding="{Binding Recipient.Email}" IsReadOnly="True" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

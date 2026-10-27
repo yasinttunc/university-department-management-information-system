@@ -1,0 +1,19 @@
+## Visual Studio / .NET build output
+bin/
+obj/
+.vs/
+packages/
+*.user
+*.suo
+*.userprefs
+TestResults/
+*.trx
+
+## OS files
+.DS_Store
+Thumbs.db
+
+## Generated locally
+smoke/
+*.db
+__pycache__/

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>UniversityDepartmentMIS.Core</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.104.1" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Database\schema.sql" LogicalName="UniversityDepartmentMIS.Core.Database.schema.sql" />
+    <EmbeddedResource Include="Database\seed.sql" LogicalName="UniversityDepartmentMIS.Core.Database.seed.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="UniversityDepartmentMIS.Core.Tests" />
+  </ItemGroup>
+
+</Project>
